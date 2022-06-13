@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python 3.10.2
       uses: actions/setup-python@v2
@@ -17,7 +17,7 @@ jobs:
     - uses: syphar/restore-virtualenv@v1
       id: cache-virtualenv
       with:
-        requirement_files: requirements.txt
+        requirement_files: requirements/dev.txt
 
     - uses: syphar/restore-pip-download-cache@v1
       if: steps.cache-virtualenv.outputs.cache-hit != 'true'
@@ -26,7 +26,7 @@ jobs:
       # requirements-files have changed.
     - run: pip install -r requirements/dev.txt
       if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-    
+
     - name: Linter
       run: flake8 src/
 

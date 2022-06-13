@@ -1,14 +1,6 @@
-from typing import Callable, Set, get_type_hints
+from typing import Callable, get_type_hints
 
-
-def varnames_with_return(func) -> Set[str]:
-    """Returns all variable names that are used
-    in the function signature. Adds 'return' to the
-    set and excludes 'args' and 'kwargs'"""
-    return (
-        set(list(func.__code__.co_varnames) + ['return'])
-        - set(['args', 'kwargs'])
-    )
+from .. import utils as typon_utils
 
 
 def inherit_typehints_for_mro(method: Callable, mro: list):
@@ -25,7 +17,7 @@ def inherit_typehints_for_mro(method: Callable, mro: list):
         annotations_to_inherit = {
             k: v for k, v
             in get_type_hints(parent_method).items()
-            if k in varnames_with_return(method)
+            if k in typon_utils.varnames_with_return(method)
         }
         new_annotations.update(annotations_to_inherit)
 

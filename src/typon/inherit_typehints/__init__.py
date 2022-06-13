@@ -1,4 +1,4 @@
-from typon.inherit_typehints import utils
+from . import utils
 
 
 class InheritableTypehints:

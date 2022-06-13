@@ -1,9 +1,9 @@
 import functools
-from typing import Optional, Callable, Any
+from typing import Optional, Callable, Any, Type
 
 
 def raises(
-    exception_cls_list: tuple[Exception] = (Exception, ),
+    exception_cls_list: tuple[Type[Exception]] = (Exception, ),
     unexpected_behaviour: Optional[Callable[[Exception, tuple, dict], Any]] = None
 ):
     """Decorator to expect explicit exception(s) to be raised."""
@@ -18,7 +18,7 @@ def raises(
         def wrapper(*args, **kwargs):
             try:
                 func(*args, **kwargs)
-            except exception_cls_list as e:  # type: ignore
+            except exception_cls_list as e:
                 return e
             except Exception as e:
                 return unexpected_behaviour(e, args, kwargs)

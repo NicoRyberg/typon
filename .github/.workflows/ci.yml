@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.10.2
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10.2
+
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+      with:
+        requirement_files: requirements.txt
+
+    - uses: syphar/restore-pip-download-cache@v1
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      # the package installation will only be executed when the
+      # requirements-files have changed.
+    - run: pip install -r requirements/dev.txt
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+    
+    - name: Linter
+      run: flake8 src/
+
+    - name: MyPy typechecker
+      run: mypy src/
+
+    - name: Run tests
+      run: python -m unittest .

@@ -1,0 +1,4 @@
+flake8==4.0.1
+mypy==0.961
+pre-commit==2.19.0
+-r prod.txt
